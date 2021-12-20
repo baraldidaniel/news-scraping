@@ -15,20 +15,14 @@ contentNews_onlytext=[]
 newsList_formatted=[]
 contentsList_formatted=[]
 linkstoNews_list=[]
+file_name='Ultimas_Noticias.xlsx'
 
-
-def patternRegex(value):
-    pattern=r'^(?!").*$'
-    newValue=re.compile(pattern,value)
-    return newValue
 
 def innerHTML(element):
     """Returns the inner HTML of an element as a UTF-8 encoded"""
     return element.encode_contents()
 
-#csvFileName = 'Últimas_Notícias.csv'
-#regexMovieYear = re.compile('(\d{4})')
-#regexUserRating = re.compile('\ ((\d{1,3})((\,|\.)\d{1,3})*)')
+
 
 try:
     url = urlopen("https://g1.globo.com/ultimas-noticias/")
@@ -46,7 +40,7 @@ else:
     for i in titleNews_onlytext:
             newsList.append(i.decode("utf-8", "strict"))
 
-    #print(newsList)
+    
 
     linkstoNews = html.find_all("a", {"class": "feed-post-link gui-color-primary gui-color-hover"})
     for i in linkstoNews:
@@ -64,28 +58,9 @@ else:
     
     data = {'News': newsList, 'Contents':contentsList, 'Links': linkstoNews_list}
     dfNews= pd.DataFrame(data)
-    
-
-
-  
-    # with open(csvFileName, 'w') as csvfile:
-    #     fileWriter = csv.writer(csvfile, delimiter=';', quoting=csv.QUOTE_MINIMAL)
-    #     fileWriter.writerow(['News','Abstract']) #HEADER 
-
-    #     for j,q in zip(newsList,contentsList):        
-    #         fileWriter.writerow([j,q]) #CONTENT
-
-            
-    #     print('Arquivo ', csvFileName, 'gerado com sucesso!')
-
-    print(dfNews)
-
-    file_name='Ultimas_Noticias.xlsx'
-
-    
     dfNews.to_excel(file_name,sheet_name='Sheet1')
    
-    print(dfNews)
+
 
     with pd.ExcelWriter(file_name, engine='xlsxwriter') as writer:
     
@@ -94,15 +69,10 @@ else:
         workbook = writer.book
         worksheet = writer.sheets['Sheet1']
 
-    # dynamically set column width
         for i, col in enumerate(dfNews.columns):
             print(i,col)
             column_len = max(dfNews[col].astype(str).str.len().max(), len(col) + 2)
             print(len(col) + 2)
-            worksheet.set_column(i+1, i+1,column_len)
-
-    #dfNews.to_excel(excel_writer=writer, sheet_name='Sheet1')
-
-    
+            worksheet.set_column(i+1, i+1,column_len)    
 
     print('Arquivo ', file_name, 'gerado com sucesso!')
