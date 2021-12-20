@@ -3,23 +3,19 @@ from urllib.error import HTTPError
 from urllib.error import URLError
 from bs4 import BeautifulSoup
 import pandas as pd
-import re 
-import csv
 import openpyxl
 import xlsxwriter
-import time
+
+#Variables
 newsList=[]
 contentsList=[]
 titleNews_onlytext=[]
 contentNews_onlytext=[]
-newsList_formatted=[]
-contentsList_formatted=[]
 linkstoNews_list=[]
 file_name='Ultimas_Noticias.xlsx'
 
 
 def innerHTML(element):
-    """Returns the inner HTML of an element as a UTF-8 encoded"""
     return element.encode_contents()
 
 
@@ -35,7 +31,6 @@ else:
     
     titleNews = html.find_all("a", {"class": "feed-post-link gui-color-primary gui-color-hover"})
     for i in titleNews:
-        #print(i)
         titleNews_onlytext.append(innerHTML(i))
     for i in titleNews_onlytext:
             newsList.append(i.decode("utf-8", "strict"))
@@ -44,7 +39,6 @@ else:
 
     linkstoNews = html.find_all("a", {"class": "feed-post-link gui-color-primary gui-color-hover"})
     for i in linkstoNews:
-        #print(i)
         linkstoNews_list.append(i['href'])
     
 
@@ -71,7 +65,6 @@ else:
 
         for i, col in enumerate(dfNews.columns):
             column_len = max(dfNews[col].astype(str).str.len().max(), len(col) + 2)
-            print(len(col) + 2)
             worksheet.set_column(i+1, i+1,column_len)    
 
     print('Arquivo ', file_name, 'gerado com sucesso!')
