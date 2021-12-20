@@ -70,7 +70,6 @@ else:
         worksheet = writer.sheets['Sheet1']
 
         for i, col in enumerate(dfNews.columns):
-            print(i,col)
             column_len = max(dfNews[col].astype(str).str.len().max(), len(col) + 2)
             print(len(col) + 2)
             worksheet.set_column(i+1, i+1,column_len)    
